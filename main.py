@@ -1,6 +1,5 @@
-import chess.engine
 from graphic import *
-from configure_engine import engine
+from engine import play
 
 def game_is_finished(pos) :
     '''Détermine si la partie est finie.'''
@@ -89,7 +88,7 @@ class Main() :
 		while True :
 			if self.turn == "BOT" :
 				if not game_is_finished(board) :
-					move, evalu = move, evalu = str(engine.play(board, chess.engine.Limit(time=0.1)).move), engine.analyse(board, chess.engine.Limit(time=0.1))["score"]
+					move, evalu = play(board)
 					print(evalu)
 					board.push(chess.Move.from_uci(move))
 					print(move)
@@ -171,7 +170,7 @@ class Main() :
 							self.turn = "BOT"
 
 						elif event.key == pygame.K_a :
-							move, evalu = str(engine.play(board, chess.engine.Limit(time=0.1)).move), engine.analyse(board, chess.engine.Limit(time=0.1))["score"]
+							move, evalu = play(board)
 							print(evalu)
 							print(move)
 							print(board.fen())
