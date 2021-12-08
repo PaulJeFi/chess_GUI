@@ -23,10 +23,11 @@ elif system == "Window" :
 path = f"./engines/{system}/{engine_name}"
 
 engine = chess.engine.SimpleEngine.popen_uci(path)
-if settings["engine"] == "komodo" : 
-    engine.configure({"Skill": settings["strength"]["Skill Level"]})
-elif settings["engine"] == "stockfish" :
-    if settings["strength"]["ELO"] :
-        engine.configure({"UCI_LimitStrength": 'true', "UCI_Elo": settings["strength"]["ELO"]})
-    else :
-        engine.configure({"Skill Level": settings["strength"]["Skill Level"]})
+if not settings["strength"]["drawer"] :
+    if settings["engine"] == "komodo" : 
+        engine.configure({"Skill": settings["strength"]["Skill Level"]})
+    elif settings["engine"] == "stockfish" :
+        if settings["strength"]["ELO"] :
+            engine.configure({"UCI_LimitStrength": 'true', "UCI_Elo": settings["strength"]["ELO"]})
+        else :
+            engine.configure({"Skill Level": settings["strength"]["Skill Level"]})

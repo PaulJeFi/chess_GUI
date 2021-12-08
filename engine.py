@@ -1,3 +1,4 @@
+from requests.api import get
 from settings import settings
 from configure_engine import engine
 import requests
@@ -27,6 +28,18 @@ def tablebase(board) :
             pass
     return None
 
+def get_drawer_move(board, engine) :
+    scores = {}
+    for move in board.legal_moves :
+        board.push(move)
+        score = engine.analyse(board, chess.engine.Limit(time=0.1))["score"]
+        if not score.is_mate() :
+            scores[str(move)] = score.relative.cp
+        board.pop()
+    zero_score = min([scores[key] for key in scores.keys()], key=abs)
+    move = [key for key in scores.keys() if zero_score == abs(scores[key])][0]
+    return move
+
 def play(board) :
     try :
         if settings["use openning book"] :
@@ -35,6 +48,8 @@ def play(board) :
         elif settings["use endgame tablebase"] :
             if tablebase(board) != None :
                 return tablebase(board), 'tablebase'
+        elif settings["strength"]["drawer"] :
+            return get_drawer_move(board, engine), engine.analyse(board, chess.engine.Limit(time=0.1))["score"]
     except Exception :
         pass
     return str(engine.play(board, chess.engine.Limit(time=0.1)).move), engine.analyse(board, chess.engine.Limit(time=0.1))["score"]
