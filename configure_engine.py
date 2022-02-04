@@ -11,13 +11,14 @@ pahts = {"Linux": ".engines/Linux",
 
 system = platform.system()
 if system == "Linux" or "Darwin" :
-    os.system(f"chmod +x ./engines/{system}/{engine_name}")
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    os.system(f"chmod +x {dir_path}/engines/{system}/{engine_name}")
     if system == "Darwin" :
         engine_name += ".1-64-osx"
     else : 
         engine_name += '_' + settings["type"]
 
-elif system == "Window" :
+elif system == "Windows" :
     engine_name += "_" + settings["type"] + 'bits' + '.exe'
 
 path = f"./engines/{system}/{engine_name}"
